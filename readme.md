@@ -55,7 +55,7 @@ PostgreSQL ➜ Spark CDC Producer ➜ Kafka Topic ➜ Spark Streaming Consumer �
 1. Run the SQL script:
 
 ```
-db/orders.sql
+bash scripts/db_setup.sh
 ```
 
 This will:
