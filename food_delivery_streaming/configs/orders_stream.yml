@@ -1,0 +1,21 @@
+postgres:
+  jdbc_url: "jdbc:postgresql://127.0.0.1:5432/food_delivery_db"
+  host: "127.0.0.1"
+  port: 5432
+  db: "food_delivery_db"
+  user: "student"
+  password: "student123"
+  table: "1100089_orders"
+  
+kafka:
+  brokers: "localhost:9092"
+  topic: "1100089_food_orders_raw"  
+
+datalake:
+  path: "/home/meet-makwana/bits/DSP/assignment-2/1100089/food_delivery_streaming/datalake/food/1100089/output/orders"
+  format: "parquet"
+
+streaming:
+  checkpoint_location: "/home/meet-makwana/bits/DSP/assignment-2/1100089/food_delivery_streaming/datalake/food/1100089/checkpoints/orders"
+  last_processed_timestamp_location: "/home/meet-makwana/bits/DSP/assignment-2/1100089/food_delivery_streaming/datalake/food/1100089/lastprocess/orders/last_ts.txt"
+  batch_interval: 5
