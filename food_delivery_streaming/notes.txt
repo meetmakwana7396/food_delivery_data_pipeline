@@ -15,11 +15,11 @@ INSERT INTO "1100089_orders" (
     ('Sneha Rao', 'Taco House', 'Veg Taco', 180, 'OUT_FOR_DELIVERY');
 
 INSERT INTO "1100089_orders" (
-    id, customer_name, restaurant_name, item, amount, order_status
+    order_id, customer_name, restaurant_name, item, amount, order_status
 ) VALUES
-    ('Harsh Mehta', 'Bite & Brew', 'Cheese Garlic Bread', 250, 'DELIVERED'),
-    ('Nidhi Verma', 'Curry Culture', 'Dal Makhani', 220, 'PENDING'),
-    ('Tushar Joshi', 'Wrap World', 'Paneer Wrap', 160, 'CANCELLED'),
-    ('Prerna Shah', 'Bean Bar', 'Iced Latte', 140, 'DELIVERED'),
-    ('Rohan Desai', 'Sushi Express', 'Veg Sushi Roll', 300, 'OUT_FOR_DELIVERY');
+    (16, 'Harsh Mehta', 'Bite & Brew', 'Cheese Garlic Bread', 250, 'DELIVERED'),
+    (20, 'Nidhi Verma', 'Curry Culture', 'Dal Makhani', -220, 'PENDING'),
+    (17, 'Tushar Joshi', 'Wrap World', 'Paneer Wrap', 160, 'CANCELLED'),
+    (18, 'Prerna Shah', 'Bean Bar', 'Iced Latte', 140, 'DELIVERED'),
+    (19, 'Rohan Desai', 'Sushi Express', 'Veg Sushi Roll', 300, 'OUT_FOR_DELIVERY');
 
