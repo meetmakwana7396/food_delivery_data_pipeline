@@ -1,5 +1,6 @@
 # consumers/orders_stream_consumer.py
-import argparse, yaml
+import argparse
+import yaml
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, to_date
 from pyspark.sql.types import (StructType, StructField,

@@ -8,9 +8,11 @@ from psycopg2 import sql
 import yaml
 from kafka import KafkaProducer
 
+
 def load_config(path):
     with open(path) as f:
         return yaml.safe_load(f)
+
 
 def get_last_ts(path):
     try:
@@ -20,11 +22,14 @@ def get_last_ts(path):
         # very old past so all existing rows go once
         return datetime.datetime(1970, 1, 1)
 
+
 def save_last_ts(path, ts):
     from pathlib import Path
+
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     with open(path, "w") as f:
         f.write(ts.isoformat())
+
 
 def main(config_path):
     cfg = load_config(config_path)
@@ -57,26 +62,35 @@ def main(config_path):
             FROM {table}
             WHERE created_at > %s
             ORDER BY created_at ASC;
-        """).format(
-            table=sql.Identifier(pg["table"])
-        )
+        """).format(table=sql.Identifier(pg["table"]))
         cur.execute(query, (last_ts,))
 
         rows = cur.fetchall()
         if rows:
+            skipped = 0
+            sent = 0
             for r in rows:
+                order_id = r[0]
+                amount_val = float(r[4]) if r[4] is not None else None
+
+                # Clean: drop invalid records
+                if order_id is None or amount_val is None or amount_val < 0:
+                    skipped += 1
+                    continue
+
                 event = {
-                    "order_id": r[0],
+                    "order_id": order_id,
                     "customer_name": r[1],
                     "restaurant_name": r[2],
                     "item": r[3],
-                    "amount": float(r[4]),
+                    "amount": amount_val,
                     "order_status": r[5],
                     "created_at": r[6].isoformat(),
                 }
                 producer.send(kafka_cfg["topic"], event)
+                sent += 1
 
-            # update last_ts to latest row created_at
+            # update last_ts to latest row created_at regardless of skips
             new_last_ts = rows[-1][6]
             save_last_ts(last_ts_path, new_last_ts)
 
@@ -85,6 +99,7 @@ def main(config_path):
 
         producer.flush()
         time.sleep(streaming["batch_interval"])
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
